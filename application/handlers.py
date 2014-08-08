@@ -31,7 +31,8 @@ class ApiHandler(tornado.web.RequestHandler):
         if data is None:
             self.wrong_data(404, 'Wrong key')
         else:
-            self.write(data)
+            ret = dict((k, v) for k, v in data.iteritems() if k in ['content', 'num'])
+            self.write(json.dumps(ret))
 
     def post(self):
         """

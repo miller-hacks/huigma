@@ -1,6 +1,7 @@
 #encoding: utf-8
 import heapq
 from hashlib import md5
+import uuid
 from datetime import datetime, timedelta
 
 
@@ -19,7 +20,7 @@ class SecretStorage():
         """
         secret_key = self.generate_secret()
         now = datetime.now()
-        expire_at = now + timedelta(expire)
+        expire_at = now + timedelta(seconds=expire)
         self.keys[secret_key] = {
             'content': content,
             'expire': expire_at,
@@ -40,7 +41,7 @@ class SecretStorage():
         if not key in self.keys:
             return None
         else:
-            if self.keys[key]['expire'] > now:
+            if self.keys[key]['expire'] < now:
                 self.keys.pop(key, None)
                 return None
             self.keys[key]['num'] -= 1
@@ -64,4 +65,4 @@ class SecretStorage():
                 break
 
     def generate_secret(self):
-        return u'{0}{1}'.format(md5().hexdigest(), md5().hexdigest())
+        return u'{0}{1}'.format(uuid.uuid4().hex, uuid.uuid4().hex)
