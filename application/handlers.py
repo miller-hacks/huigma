@@ -38,6 +38,7 @@ class ApiHandler(tornado.web.RequestHandler):
         Load params from post data and save secret
         N.B.> returns 400 for empty text message
         """
+        print self.request.__dict__
         body = json.loads(self.request.body)
         content = body.get('content', None)
         params = dict()
@@ -47,6 +48,7 @@ class ApiHandler(tornado.web.RequestHandler):
                 params[key] = value
         if content:
             key = self.application.storage.save(content, **params)
-            self.write({'hash': hash, 'link': '%s/%s' % (self.request.host, key)})
+            ret = {'hash': hash, 'link': '%s/%s' % (self.request.host, key)}
+            self.write(json.dumps(ret))
         else:
             self.wrong_data(400, 'No content')
