@@ -1,6 +1,6 @@
 # encoding: utf-8
 import tornado.web
-
+import json
 
 class MainHandler(tornado.web.RequestHandler):
     template_name = 'base.html'
@@ -17,9 +17,9 @@ class ApiHandler(tornado.web.RequestHandler):
         super(ApiHandler, self).__init__(*args, **kwargs)
         self.set_header('Content-Type', 'application/json; charset="utf-8"')
 
-    def wrong_data(self, message):
+    def wrong_data(self, code, message):
         self.clear()
-        self.set_status(400)
+        self.set_status(code)
         self.finish(message)
 
     def get(self, key):
@@ -28,7 +28,7 @@ class ApiHandler(tornado.web.RequestHandler):
         """
         data = self.application.storage.get(key)
         if data is None:
-            self.wrong_data('Wrong key')
+            self.wrong_data(404, 'Wrong key')
         else:
             self.write(data)
 
@@ -38,13 +38,14 @@ class ApiHandler(tornado.web.RequestHandler):
         N.B.> returns 400 for empty text message
         """
         print(self.request.__dict__)
-        content = self.get_argument('content', None)
+        body = json.loads(self.request.body)
+        content = body.get('content', None)
         params = dict()
         for key in ['expire', 'num', 'callback']:
-            value = self.get_argument(key, None)
+            value = body.get(key, None)
             if value:
                 params[key] = value
         if content:
             self.write(self.application.storage.save(content, **params))
         else:
-            self.wrong_data('No content')
+            self.wrong_data(400, 'No content')
