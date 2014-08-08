@@ -15,7 +15,7 @@ class SecretStorage():
         :param expire: expire in seconds
         :param num: number of possible views
         :param callback: callback url or email
-        :return: json {link: '', hash: ''}
+        :return: secret key
         """
         secret_key = self.generate_secret()
         now = datetime.now()
@@ -27,6 +27,7 @@ class SecretStorage():
             'callback': callback
         }
         heapq.heappush(self.expire_heap, (expire_at, secret_key))
+        return secret_key
 
     def get(self, key):
         """
