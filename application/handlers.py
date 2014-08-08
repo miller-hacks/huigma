@@ -48,7 +48,7 @@ class ApiHandler(tornado.web.RequestHandler):
                 params[key] = value
         if content:
             key = self.application.storage.save(content, **params)
-            ret = {'hash': hash, 'link': '%s/%s' % (self.request.host, key)}
+            ret = {'key': key, 'link': '%s/%s' % (self.request.host, key)}
             self.write(json.dumps(ret))
         else:
             self.wrong_data(400, 'No content')
