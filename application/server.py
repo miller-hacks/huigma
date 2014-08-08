@@ -5,15 +5,17 @@ import tornado.web
 import os
 from tornado.options import define, options
 from handlers import MainHandler, ApiHandler
+from storage import SecretStorage
 
 define("port", default=8000, help="run on the given port", type=int)
 
 
 class Application(tornado.web.Application):
     def __init__(self):
+        self.storage = SecretStorage()
         handlers = [
             (r"/", MainHandler),
-            (r"/api/", ApiHandler),
+            (r"/api/(?P<key>[A-Za-z0-9-]+)", ApiHandler),
         ]
         settings = dict(
             cookie_secret="HUIGMA SECRET KEY",
