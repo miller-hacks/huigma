@@ -13,15 +13,38 @@
     <div id="app"></div>
     <script type="text/jsx">
         /** @jsx React.DOM */
-        var settings = {
-            api_url: '/api/'
-        };
+        var path = window.location.pathname.slice(1),
+        	settings = {
+            	api_url: '/api/'
+        	};
 
         var Webigma = React.createClass({
         	getInitialState: function() {
+        		console.log(this.props.settings);
+
         		return {
         			state: 'init'
         		}
+        	},
+        	componentDidMount: function() {
+        		if(this.props.path) this.get(path);
+        	},
+        	get: function(data) {
+        		this.setState({state: 'sending'});
+
+				$.ajax({
+        			url: this.props.settings.api_url + data,
+        			method: 'get',
+					success: function(data) {
+                        this.setState({state: 'init'});
+                        this.ref.secret.getDOMNode().value = data;
+                        console.log('success', this.state.data);
+                    }.bind(this),
+                    error: function(xhr, status, err) {
+                        this.setState({state: 'init'});
+                        console.error('error', status, err.toString());
+                    }.bind(this)
+        		})
         	},
         	post: function(data) {
         		this.setState({state: 'sending'});
@@ -80,7 +103,7 @@
 
 
         React.renderComponent(
-            <Webigma settings={settings} />,
+            <Webigma settings={settings} path={path} />,
             document.getElementById('app')
         );
     </script>
