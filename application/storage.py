@@ -55,6 +55,7 @@ class SecretStorage():
         while True:
             try:
                 expire, key = heapq.heappop(self.expire_heap)
+                print expire, key
             except IndexError:
                 return
 
