@@ -16,6 +16,7 @@ class Application(tornado.web.Application):
         self.storage = SecretStorage()
         handlers = [
             (r"/", MainHandler),
+            (r"/[A-Za-z0-9-]+", MainHandler),
             (r"/api", ApiHandler),
             (r"/api/(?P<key>[A-Za-z0-9-]+)", ApiHandler),
         ]
