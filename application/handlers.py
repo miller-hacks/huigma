@@ -7,6 +7,9 @@ class MainHandler(tornado.web.RequestHandler):
         self.write("Hello, main page")
 
 
-class PasswordHandler(tornado.web.RequestHandler):
+class ApiHandler(tornado.web.RequestHandler):
     def get(self):
         self.write("Hello, password handler")
+
+    def post(self):
+        self.write("post")

@@ -4,7 +4,7 @@ import tornado.ioloop
 import tornado.web
 import os
 from tornado.options import define, options
-from handlers import MainHandler, PasswordHandler
+from handlers import MainHandler, ApiHandler
 
 define("port", default=8000, help="run on the given port", type=int)
 
@@ -13,7 +13,7 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
             (r"/", MainHandler),
-            (r"/password/", PasswordHandler),
+            (r"/api/", ApiHandler),
         ]
         settings = dict(
             cookie_secret="HUIGMA SECRET KEY",
