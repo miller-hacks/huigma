@@ -15,7 +15,7 @@
         /** @jsx React.DOM */
         var path = window.location.pathname.slice(1),
         	settings = {
-            	api_url: '/api/'
+            	api_url: '/api'
         	};
 
         var Webigma = React.createClass({
@@ -33,11 +33,11 @@
         		this.setState({state: 'sending'});
 
 				$.ajax({
-        			url: this.props.settings.api_url + data,
+        			url: this.props.settings.api_url + '/' + data,
         			method: 'get',
 					success: function(data) {
                         this.setState({state: 'init'});
-                        this.ref.secret.getDOMNode().value = data;
+                        this.refs.secret.getDOMNode().value = data.content;
                         console.log('success', this.state.data);
                     }.bind(this),
                     error: function(xhr, status, err) {
@@ -52,13 +52,13 @@
 
 				$.ajax({
         			url: this.props.settings.api_url,
-        			data: data,
+        			data: JSON.stringify(data),
         			dataType: 'json',
         			method: 'post',
 					success: function(data) {
                         this.setState({state: 'init'});
-                        this.ref.secret.getDOMNode().value = data.link;
-                        console.log('success', this.state.data);
+                        this.refs.secret.getDOMNode().value = data.link;
+                        console.log('success', data);
                     }.bind(this),
                     error: function(xhr, status, err) {
                         this.setState({state: 'init'});
