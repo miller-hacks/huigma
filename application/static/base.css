@@ -1,1 +1,77 @@
 /* Huigma css */
+#app {
+	width: 960px;
+	height: 100%;
+
+	margin: 0 auto;
+
+	color: #CCC;
+}
+
+/* Webigma */
+.b-webigma {
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+
+.b-webigma__heading {
+	font-size: 300%;
+	text-transform: uppercase;
+	text-align: center;
+}
+
+.b-webigma__text-input {
+	padding: 20px;
+	color: #CCC;
+
+	font-family: Verdana, monospace, courier, 'Courier New';
+	font-size: 150%;
+	letter-spacing: 0.05em;
+
+	width: 100%;
+	height: 300px;
+
+	border: 2px dotted #CCC;
+	border-radius: 10px;
+}
+
+.b-webigma__text-input:focus {
+    outline: 0;
+}
+
+.b-webigma__submit {
+	cursor: pointer;
+
+	margin-top: 10px;
+	margin-right: 10px;
+	padding: 10px 200px;
+	
+	display:inline-block;
+	
+	line-height: 100%;
+	font-size: 200%;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	text-shadow: 0 1px rgba(0, 0, 0, 0.4);
+	font-family: 'Helvetica Neue', Helvetica, sans-serif;
+	font-weight: bold;
+	vertical-align: middle;
+	text-align: center;
+	color: #fff;
+
+	border-radius: 3px;
+	
+
+	transition: background 0.1s ease-in-out;
+}
+
+.b-webigma__submit:active {
+	padding-top: 15px;
+    margin-bottom: -1px;
+}
+
+.b-webigma__submit, .b-webigma__submit:hover, .b-webigma__submit:active {
+	outline: 0 none;
+	text-decoration: none;
+	color: #fff;
+}
