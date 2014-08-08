@@ -38,11 +38,11 @@ class SecretStorage():
             return None
         else:
             if self.keys[key]['expire'] > now:
-                self.keys.pop(key)
+                self.keys.pop(key, None)
                 return None
             self.keys[key]['num'] -= 1
             if self.keys[key]['num'] <= 0:
-                return self.keys.pop(key)
+                return self.keys.pop(key, None)
             return self.keys[key]
 
     def expire(self):
@@ -55,7 +55,7 @@ class SecretStorage():
 
             if expire <= now:
                 if key in self.keys and self.keys[key]['expire'] < now:
-                    self.keys.pop(key)
+                    self.keys.pop(key, None)
             else:
                 break
 
