@@ -1,4 +1,10 @@
+#encoding: utf-8
+
+
 class SecretStorage():
+    def __init__(*args, **kwargs):
+        pass
+
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(SecretStorage, cls).__new__(cls)
