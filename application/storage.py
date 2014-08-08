@@ -1,8 +1,11 @@
+#encoding: utf-8
+import heapq
+from hashlib import md5
+
+
 class SecretStorage():
-    def __new__(cls):
-        if not hasattr(cls, 'instance'):
-            cls.instance = super(SecretStorage, cls).__new__(cls)
-        return cls.instance
+    def __init__(self, *args, **kwargs):
+        self.keys = {}
 
     def save(self, content, expire=1800, num=1, callback=None):
         """
@@ -12,7 +15,6 @@ class SecretStorage():
         :param callback: callback url or email
         :return: json {link: '', hash: ''}
         """
-        pass
 
     def get(self, key):
         """
@@ -20,3 +22,9 @@ class SecretStorage():
         :return: content
         """
         pass
+
+    def expire(self):
+        pass
+
+    def generate_secret(self):
+        return u'{0}{1}'.format(md5().hexdigest(), md5().hexdigest())
