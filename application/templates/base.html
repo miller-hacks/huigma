@@ -2,9 +2,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <title>Webigma</title>
-    <script src="http://fb.me/react-with-addons-0.11.0.js"></script>
-    <script src="http://fb.me/JSXTransformer-0.11.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <script src="//fb.me/react-with-addons-0.11.0.js"></script>
+    <script src="//fb.me/JSXTransformer-0.11.0.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.0.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
     <link href="/static/base.css" rel="stylesheet">
@@ -20,35 +20,37 @@
 
         var Webigma = React.createClass({
         	getInitialState: function() {
-        		console.log(this.props.settings);
+        		//console.log(this.props.settings);
 
         		return {
-        			state: 'init'
+        			state: 'init',
+        			message: 'Мы начинаем КВН'
         		}
         	},
         	componentDidMount: function() {
         		if(this.props.path) this.get(path);
         	},
         	get: function(data) {
-        		this.setState({state: 'sending'});
+        		this.setState({state: 'recieving'});
 
 				$.ajax({
         			url: this.props.settings.api_url + '/' + data,
         			method: 'get',
 					success: function(data) {
-                        this.setState({state: 'init'});
+                        this.setState({state: 'recieve'});
                         this.refs.secret.getDOMNode().value = data.content;
-                        console.log('success', this.state.data);
+                        this.refs.number.getDOMNode().value = data.num;
+                        //console.log('success', data);
                     }.bind(this),
                     error: function(xhr, status, err) {
-                        this.setState({state: 'init'});
-                        console.error('error', status, err.toString());
+                        this.setState({state: 'recieve'});
+                        //console.error('error', status, err.toString());
                     }.bind(this)
         		})
         	},
         	post: function(data) {
-        		console.log('posting', data);
-        		this.setState({state: 'sending'});
+        		//console.log('posting', data);
+        		this.setState({state: 'posting'});
 
 				$.ajax({
         			url: this.props.settings.api_url,
@@ -56,13 +58,13 @@
         			dataType: 'json',
         			method: 'post',
 					success: function(data) {
-                        this.setState({state: 'init'});
+                        this.setState({state: 'recieve'});
                         this.refs.secret.getDOMNode().value = data.link;
-                        console.log('success', data);
+                        //console.log('success', data);
                     }.bind(this),
                     error: function(xhr, status, err) {
-                        this.setState({state: 'init'});
-                        console.error('error', status, err.toString());
+                        this.setState({state: 'recieve'});
+                        //console.error('error', status, err.toString());
                     }.bind(this)
         		})
         	},
@@ -77,12 +79,22 @@
             	return false;
             },
             render: function(){
-            	var container_classes = 'b-webigma';
-            	var button_is_disabled = false;
-            	if(this.state.state == 'sending') {
-            		container_classes = container_classes + ' b-webigma_state_sending';
-            		button_is_disabled = true;
-            	}
+            	var state = this.state.state,
+            		container_classes = 'b-webigma';
+            		button_is_disabled = false;
+
+        		container_classes = container_classes + ' b-webigma_state_' + state;
+
+        		switch(state) {
+        			case 'posting':
+        			case 'recieving':
+        				button_is_disabled = true;
+        				break;
+        			case 'recieve':
+        				break;
+        			default:
+        				break;
+        		}
 
                 return (
                     <div className={container_classes}>
@@ -96,6 +108,10 @@
 	                        	<i className="fa fa-lock"></i>
                         	</button>
                         </form>
+
+                        <div className="b-webigma__message-wrapper">
+                        	<div className="b-webigma__message">{this.state.message}</div>
+                        </div>
 
                         <div className="b-webigma__copyright">
                         	© <a href="https://github.com/miller-hacks">miller-hacks</a>, 2014
