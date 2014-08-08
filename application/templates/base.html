@@ -14,24 +14,64 @@
     <script type="text/jsx">
         /** @jsx React.DOM */
         var settings = {
-            api_url: '/'
+            api_url: '/api/'
         };
 
         var Webigma = React.createClass({
+        	getInitialState: function() {
+        		return {
+        			state: 'init'
+        		}
+        	},
+        	post: function(data) {
+        		this.setState({state: 'sending'});
+
+        		setTimeout($.ajax({
+        			url: this.props.settings.api_url,
+        			data: data,
+        			dataType: 'json',
+        			method: 'post',
+					success: function(data) {
+                        this.setState({state: 'init'});
+                        console.log('success', this.state.data);
+                    }.bind(this),
+                    error: function(xhr, status, err) {
+                        this.setState({state: 'init'});
+                        console.error('error', status, err.toString());
+                    }.bind(this)
+        		}), 2000);
+        	},
             handleSubmit: function(e) {
-            	console.log('Hello world!');
+            	this.post({
+            		content: this.refs.secret.getDOMNode().value,
+            		expire: '',
+            		num: 1,
+            		callback: ''
+        		});
+
             	return false;
             },
             render: function(){
+            	var container_classes = 'b-webigma';
+            	var button_is_disabled = false;
+            	if(this.state.state == 'sending') {
+            		container_classes = container_classes + ' b-webigma_state_sending';
+            		button_is_disabled = true;
+            	}
+
                 return (
                     <div className="b-webigma" >
                         <h1 className="b-webigma__heading">All hail the Huigma</h1>
-                        <form method="post" action="">
+                        <form method="post" action={this.props.settings.api_url}>
 	                        <textarea className="b-webigma__text-input" ref="secret" spellCheck="false" />
-	                        <button onClick={this.handleSubmit} className="b-webigma__submit">
+	                        <button onClick={this.handleSubmit} className="b-webigma__submit" disabled={button_is_disabled}>
 	                        	<i className="fa fa-lock"></i>
                         	</button>
                         </form>
+
+                        <div className="b-webigma__copyright">
+                        	© <a href="https://github.com/miller-hacks">miller-hacks</a>, 2014
+                        </div>
                     </div>
                 )
             }
