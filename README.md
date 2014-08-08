@@ -1,4 +1,4 @@
 huigma
 ======
 
-share your password securely
+share your passwords securely
