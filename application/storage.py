@@ -1,6 +1,5 @@
 #encoding: utf-8
 import heapq
-from hashlib import md5
 import uuid
 from datetime import datetime, timedelta
 

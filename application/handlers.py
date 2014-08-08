@@ -18,6 +18,15 @@ class ApiHandler(tornado.web.RequestHandler):
         super(ApiHandler, self).__init__(*args, **kwargs)
         self.set_header('Content-Type', 'application/json; charset="utf-8"')
 
+    @staticmethod
+    def parse_int(val):
+        result = None
+        try:
+            result = int(val)
+        except ValueError:
+            pass
+        return result
+
     def wrong_data(self, code, message):
         self.clear()
         self.set_status(code)
@@ -39,13 +48,14 @@ class ApiHandler(tornado.web.RequestHandler):
         Load params from post data and save secret
         N.B.> returns 400 for empty text message
         """
-        print self.request.__dict__
         body = json.loads(self.request.body)
         content = body.get('content', None)
         params = dict()
         for key in ['expire', 'num', 'callback']:
             value = body.get(key, None)
             if value:
+                if key != 'callback':
+                    value = self.parse_int(value)
                 params[key] = value
         if content:
             key = self.application.storage.save(content, **params)
