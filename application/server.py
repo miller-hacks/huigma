@@ -16,9 +16,9 @@ class Application(tornado.web.Application):
         self.storage = SecretStorage()
         handlers = [
             (r"/", MainHandler),
-            (r"/[A-Za-z0-9-]+", MainHandler),
             (r"/api", ApiHandler),
             (r"/api/(?P<key>[A-Za-z0-9-]+)", ApiHandler),
+            (r"/[A-Za-z0-9-]+", MainHandler),
         ]
         settings = dict(
             cookie_secret="(d(34@)%g(6@056!z78+!z_&#no@)3$y0@l*8hmy08@v7nkw1v",
