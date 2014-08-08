@@ -40,7 +40,7 @@ class SecretStorage():
         if not key in self.keys:
             return None
         else:
-            if self.keys[key]['expire'] > now:
+            if self.keys[key]['expire'] < now:
                 self.keys.pop(key, None)
                 return None
             self.keys[key]['num'] -= 1
