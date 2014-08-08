@@ -32,7 +32,7 @@ a:hover {
 	text-align: center;
 }
 
-.b-webigma__text-input {
+.b-webigma__text {
 	padding: 20px;
 	color: #CCC;
 
@@ -49,12 +49,34 @@ a:hover {
 	transition: all 0.2s ease;
 }
 
-.b-webigma_state_sending .b-webigma__text-input {
+.b-webigma__text-input {
+	padding: 20px;
+	margin-right: 4px; 
+	color: #CCC;
+
+	font-family: Verdana, monospace, courier, 'Courier New';
+	font-size: 150%;
+	letter-spacing: 0.05em;
+
+	width: 33%;
+
+	border: 2px dotted #CCC;
+	border-radius: 10px;
+
+	transition: all 0.2s ease;
+}
+
+.b-webigma__text-input:last-of-type {
+	margin-right: 0;
+}
+
+.b-webigma_state_sending .b-webigma__text {
 	background: #CCC;
 
 	transition: all 0.2s ease;
 }
 
+.b-webigma__text:focus,
 .b-webigma__text-input:focus {
     outline: 0;
 }
