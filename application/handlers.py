@@ -37,6 +37,7 @@ class ApiHandler(tornado.web.RequestHandler):
         Load params from post data and save secret
         N.B.> returns 400 for empty text message
         """
+        print(self.request.__dict__)
         content = self.get_argument('content', None)
         params = dict()
         for key in ['expire', 'num', 'callback']:
