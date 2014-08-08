@@ -1,9 +1,47 @@
-<!DOCTYPE html>
 <html>
-<head>
-    <title></title>
-</head>
-<body>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>Webigma</title>
+    <script src="http://fb.me/react-with-addons-0.11.0.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.11.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-</body>
+    <link href="/static/base.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/jsx">
+        /** @jsx React.DOM */
+        var settings = {
+            api_url: '/'
+        };
+
+        var Webigma = React.createClass({
+            handleSubmit: function(e) {
+            	console.log('Hello world!');
+            	return false;
+            },
+            render: function(){
+                return (
+                    <div className="b-webigma" >
+                        <h1 className="b-webigma__heading">All hail the Huigma</h1>
+                        <form method="post" action="">
+	                        <textarea className="b-webigma__text-input" ref="secret" spellCheck="false" />
+	                        <button onClick={this.handleSubmit} className="b-webigma__submit">
+	                        	<i className="fa fa-lock"></i>
+                        	</button>
+                        </form>
+                    </div>
+                )
+            }
+        });
+
+
+        React.renderComponent(
+            <Webigma settings={settings} />,
+            document.getElementById('app')
+        );
+    </script>
+  </body>
 </html>
