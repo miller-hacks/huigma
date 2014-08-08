@@ -62,6 +62,7 @@ class SecretStorage():
                 if key in self.keys and self.keys[key]['expire'] < now:
                     self.keys.pop(key, None)
             else:
+                heapq.heappush(self.expire_heap, (expire, key))
                 break
 
     def generate_secret(self):
