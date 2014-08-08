@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 
 class SecretStorage():
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         self.keys = {}
         self.expire_heap = []
 
