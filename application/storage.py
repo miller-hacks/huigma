@@ -27,9 +27,11 @@ class SecretStorage():
             'callback': callback
         }
         heapq.heappush(self.expire_heap, (expire_at, secret_key))
+        print self.keys
         return secret_key
 
     def get(self, key):
+        print self.keys
         """
         :param key: secret hash
         :return: content or None
@@ -47,6 +49,7 @@ class SecretStorage():
             return self.keys[key]
 
     def expire(self):
+        print self.keys
         now = datetime.now()
         while True:
             try:
