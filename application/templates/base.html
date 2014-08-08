@@ -26,20 +26,21 @@
         	post: function(data) {
         		this.setState({state: 'sending'});
 
-        		setTimeout($.ajax({
+				$.ajax({
         			url: this.props.settings.api_url,
         			data: data,
         			dataType: 'json',
         			method: 'post',
 					success: function(data) {
                         this.setState({state: 'init'});
+                        this.ref.secret.getDOMNode().value = '';
                         console.log('success', this.state.data);
                     }.bind(this),
                     error: function(xhr, status, err) {
                         this.setState({state: 'init'});
                         console.error('error', status, err.toString());
                     }.bind(this)
-        		}), 2000);
+        		})
         	},
             handleSubmit: function(e) {
             	this.post({
@@ -60,7 +61,7 @@
             	}
 
                 return (
-                    <div className="b-webigma" >
+                    <div className={container_classes}>
                         <h1 className="b-webigma__heading">All hail the Huigma</h1>
                         <form method="post" action={this.props.settings.api_url}>
 	                        <textarea className="b-webigma__text-input" ref="secret" spellCheck="false" />
