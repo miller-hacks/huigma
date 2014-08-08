@@ -46,7 +46,18 @@ class SecretStorage():
             return self.keys[key]
 
     def expire(self):
-        pass
+        now = datetime.now()
+        while True:
+            try:
+                expire, key = heapq.heappop(self.expire_heap)
+            except IndexError:
+                return
+
+            if expire <= now:
+                if key in self.keys and self.keys[key]['expire'] < now:
+                    self.keys.pop(key)
+            else:
+                break
 
     def generate_secret(self):
         return u'{0}{1}'.format(md5().hexdigest(), md5().hexdigest())
