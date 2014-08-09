@@ -1,0 +1,26 @@
+{
+  "name": "huigma",
+  "version": "0.0.0",
+  "homepage": "https://github.com/miller-hacks/huigma",
+  "authors": [
+    "Sergey Trofimov <truetug@gmail.com>"
+  ],
+  "description": "share your passwords securely",
+  "main": "?",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "react": "~0.11.1",
+    "font-awesome": "~4.1.0"
+  }
+}
