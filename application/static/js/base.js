@@ -10,7 +10,8 @@
 
         return {
             state: 'init',
-            message: 'Мы начинаем КВН'
+            message: 'Мы начинаем КВН',
+            overlay: false
         };
     },
     componentDidMount: function() {
@@ -23,13 +24,21 @@
             url: this.props.settings.api_url + '/' + data,
             method: 'get',
             success: function(data) {
-                this.setState({state: 'recieve'});
-                this.refs.secret.getDOMNode().value = data.content;
-                this.refs.number.getDOMNode().value = data.num;
+                // this.refs.secret.getDOMNode().value = data.content;
+                // this.refs.number.getDOMNode().value = data.num;
+                this.setState({
+                    state: 'recieve',
+                    message: data.content, 
+                    overlay: true
+                });
                 //console.log('success', data);
             }.bind(this),
             error: function(xhr, status, err) {
-                this.setState({state: 'recieve'});
+                this.setState({
+                    state: 'recieve', 
+                    message: 'Something went wrong: ' + status.toString(), 
+                    overlay: true
+                });
                 //console.error('error', status, err.toString());
             }.bind(this)
         });
@@ -45,16 +54,21 @@
             method: 'post',
             success: function(data) {
                 this.setState({state: 'recieve'});
-                this.refs.secret.getDOMNode().value = data.link;
+                this.refs.secret.getDOMNode().value = '';
+                this.setState({message: data.link, overlay: true});
                 //console.log('success', data);
             }.bind(this),
             error: function(xhr, status, err) {
-                this.setState({state: 'recieve'});
+                this.setState({
+                    state: 'recieve',
+                    message: 'Something went wrong: ' + status.toString(),
+                    overlay: true
+                });
                 //console.error('error', status, err.toString());
             }.bind(this)
         });
     },
-    handleSubmit: function(e) {
+    handleSubmit: function() {
         this.post({
             content: this.refs.secret.getDOMNode().value,
             expire: this.refs.expire.getDOMNode().value,
@@ -64,12 +78,19 @@
 
         return false;
     },
+    handleOverlayClose: function() {
+        this.setState({
+            message: '',
+            overlay: false
+        });
+    },
     render: function(){
         var state = this.state.state,
-            container_classes = 'b-webigma';
+            container_classes = ['b-webigma'];
             button_is_disabled = false;
 
-        container_classes = container_classes + ' b-webigma_state_' + state;
+        container_classes.push('b-webigma_state_' + state);
+        container_classes = container_classes.join(' ');
 
         switch(state) {
             case 'posting':
@@ -101,10 +122,45 @@
 
                 React.DOM.div({className: "b-webigma__copyright"}, 
                     "© ", React.DOM.a({href: "https://github.com/miller-hacks"}, "miller-hacks"), ", 2014"
-                )
+                ), 
+
+                Overlay({content: this.state.message, is_open: this.state.overlay, onOverlayClose: this.handleOverlayClose})
             )
         );
     }
+    });
+
+
+    var Overlay = React.createClass({displayName: 'Overlay',
+        getInitialState: function(){
+            return {
+            };
+        },
+        getDefaultProps: function(){
+            return {
+                content: (React.DOM.p(null, "Bee-bee, bee-bee, yeah"))
+            };
+        },
+        componentDidMount: function() {
+            
+        },
+        render: function(){
+            var overlay_classes = ['b-overlay'],
+                overlay_style = 'b-overlay_scale';
+
+            overlay_classes.push(overlay_style);
+            if(this.props.is_open) overlay_classes.push(overlay_style + '_open');
+            overlay_classes = overlay_classes.join(' ');
+
+            return (
+                React.DOM.div({className: overlay_classes}, 
+                    React.DOM.button({type: "button", className: "b-overlay__close", onClick: this.props.onOverlayClose}, 
+                        React.DOM.i({className: "fa fa-ban"})
+                    ), 
+                    React.DOM.div({className: "b-overlay__content"}, this.props.content)
+                )
+            );
+        }
     });
 
 

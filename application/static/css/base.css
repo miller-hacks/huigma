@@ -151,3 +151,74 @@ a:hover {
 	bottom: 10px;
 	right: 10px;
 }
+
+/** Overlay **/
+.b-overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(30,30,30,0.9);
+    color: #FFF;
+}
+
+.b-overlay_scale {
+    visibility: hidden;
+    opacity: 0;
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+    -webkit-transition: -webkit-transform 0.2s, opacity 0.2s, visibility 0s 0.2s;
+    transition: transform 0.2s, opacity 0.2s, visibility 0s 0.2s;
+}
+
+.b-overlay_scale_open {
+    visibility: visible;
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);    
+    -webkit-transition: -webkit-transform 0.4s, opacity 0.4s;
+    transition: transform 0.4s, opacity 0.4s;
+}
+
+/* Overlay closing cross */
+.b-overlay__close {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    overflow: hidden;
+    border: none;
+    /*background: url(../img/cross.png) no-repeat center center;*/
+    /*text-indent: 200%;*/
+    /*color: transparent;*/
+    outline: none;
+    z-index: 100;
+
+    font-size: 200%;
+}
+
+.b-overlay__content {
+    position: absolute;
+
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    text-align: left;
+    
+    margin: 0;
+    
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    overflow: auto;
+    padding: 10%;
+
+    width: 80%;
+    height: 80%;
+
+    font-size: 200%;
+
+}
