@@ -183,18 +183,19 @@ a:hover {
 
 /* Overlay closing cross */
 .b-overlay__close {
-    width: 80px;
-    height: 80px;
     position: absolute;
     right: 20px;
     top: 20px;
     overflow: hidden;
     border: none;
     /*background: url(../img/cross.png) no-repeat center center;*/
+    background: none;
     /*text-indent: 200%;*/
     /*color: transparent;*/
     outline: none;
     z-index: 100;
+    cursor: pointer;
+    color: #FFF;
 
     font-size: 200%;
 }
@@ -216,8 +217,8 @@ a:hover {
     overflow: auto;
     padding: 10%;
 
-    width: 80%;
-    height: 80%;
+    /*width: 80%;
+    height: 80%;*/
 
     font-size: 200%;
 

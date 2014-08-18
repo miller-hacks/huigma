@@ -1,10 +1,29 @@
-    /** @jsx React.DOM */
-    var path = window.location.pathname.slice(1),
-    settings = {
-        api_url: '/api'
-    };
+/** @jsx React.DOM */
+var path = window.location.pathname.slice(1),
+settings = {
+    api_url: '/api'
+};
 
-    var Webigma = React.createClass({displayName: 'Webigma',
+var select = function(e) {
+    var range;
+
+    if (document.body.createTextRange) {
+        range = document.body.createTextRange();
+        range.moveToElementText(e);
+        range.select();
+    }
+    else if (window.getSelection) {
+        var selection = window.getSelection();
+        range = document.createRange();
+        range.selectNodeContents(e);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+
+    //console.log('select', e, range, selection);
+};
+
+var Webigma = React.createClass({displayName: 'Webigma',
     getInitialState: function() {
         //console.log(this.props.settings);
 
@@ -15,6 +34,7 @@
         };
     },
     componentDidMount: function() {
+        this.attachKeyPressListener();
         if(this.props.path) this.get(path);
     },
     get: function(data) {
@@ -26,9 +46,14 @@
             success: function(data) {
                 // this.refs.secret.getDOMNode().value = data.content;
                 // this.refs.number.getDOMNode().value = data.num;
+
+                //var content = $('<div>' + data.content + '</div>')[0];
+                //hljs.highlightBlock(content[0]);
+                var content = data.content;
+
                 this.setState({
                     state: 'recieve',
-                    message: data.content, 
+                    message: content, 
                     overlay: true
                 });
                 //console.log('success', data);
@@ -36,10 +61,10 @@
             error: function(xhr, status, err) {
                 this.setState({
                     state: 'recieve', 
-                    message: 'Something went wrong: ' + status.toString(), 
+                    message: 'Something went wrong: ' + err.toString(), 
                     overlay: true
                 });
-                //console.error('error', status, err.toString());
+                console.error('error', status, err.toString());
             }.bind(this)
         });
     },
@@ -61,10 +86,10 @@
             error: function(xhr, status, err) {
                 this.setState({
                     state: 'recieve',
-                    message: 'Something went wrong: ' + status.toString(),
+                    message: 'Something went wrong: ' + err.toString(),
                     overlay: true
                 });
-                //console.error('error', status, err.toString());
+                console.error('error', status, err.toString());
             }.bind(this)
         });
     },
@@ -78,11 +103,29 @@
 
         return false;
     },
+    attachKeyPressListener: function () {
+        window.addEventListener('keydown', this.keyPressListener);
+    },
+    keyPressListener: function(e){
+        var keyCode = e.keyCode || e.which, func;
+        //console.log(e);
+
+        if(keyCode == 27) func = this.handleOverlayClose;
+        else if(this.state.state =='recieve' && keyCode == 65 && e.metaKey) func = this.handleSelection;
+
+        if(func) {
+            e.preventDefault();
+            func();
+        }
+    },
     handleOverlayClose: function() {
         this.setState({
             message: '',
             overlay: false
         });
+    },
+    handleSelection: function() {
+        select(document.getElementsByClassName('b-overlay__content')[0]);
     },
     render: function(){
         var state = this.state.state,
@@ -117,7 +160,7 @@
                 ), 
 
                 React.DOM.div({className: "b-webigma__message-wrapper"}, 
-                    React.DOM.div({className: "b-webigma__message"}, this.state.message)
+                    React.DOM.div({className: "b-webigma__message", ref: "message"}, this.state.message)
                 ), 
 
                 React.DOM.div({className: "b-webigma__copyright"}, 
@@ -128,43 +171,43 @@
             )
         );
     }
-    });
+});
 
 
-    var Overlay = React.createClass({displayName: 'Overlay',
-        getInitialState: function(){
-            return {
-            };
-        },
-        getDefaultProps: function(){
-            return {
-                content: (React.DOM.p(null, "Bee-bee, bee-bee, yeah"))
-            };
-        },
-        componentDidMount: function() {
-            
-        },
-        render: function(){
-            var overlay_classes = ['b-overlay'],
-                overlay_style = 'b-overlay_scale';
+var Overlay = React.createClass({displayName: 'Overlay',
+    getInitialState: function(){
+        return {
+        };
+    },
+    getDefaultProps: function(){
+        return {
+            content: (React.DOM.p(null, "Bee-bee, bee-bee, yeah"))
+        };
+    },
+    componentDidMount: function() {
+        
+    },
+    render: function(){
+        var overlay_classes = ['b-overlay'],
+            overlay_style = 'b-overlay_scale';
 
-            overlay_classes.push(overlay_style);
-            if(this.props.is_open) overlay_classes.push(overlay_style + '_open');
-            overlay_classes = overlay_classes.join(' ');
+        overlay_classes.push(overlay_style);
+        if(this.props.is_open) overlay_classes.push(overlay_style + '_open');
+        overlay_classes = overlay_classes.join(' ');
 
-            return (
-                React.DOM.div({className: overlay_classes}, 
-                    React.DOM.button({type: "button", className: "b-overlay__close", onClick: this.props.onOverlayClose}, 
-                        React.DOM.i({className: "fa fa-ban"})
-                    ), 
-                    React.DOM.div({className: "b-overlay__content"}, this.props.content)
-                )
-            );
-        }
-    });
+        return (
+            React.DOM.div({className: overlay_classes}, 
+                React.DOM.button({type: "button", className: "b-overlay__close", onClick: this.props.onOverlayClose}, 
+                    React.DOM.i({className: "fa fa-times"})
+                ), 
+                React.DOM.div({className: "b-overlay__content", dangerouslySetInnerHTML: { __html: this.props.content}})
+            )
+        );
+    }
+});
 
 
-    React.renderComponent(
-    Webigma({settings: settings, path: path}),
-    document.getElementById('app')
-    );
+React.renderComponent(
+Webigma({settings: settings, path: path}),
+document.getElementById('app')
+);
