@@ -80,7 +80,7 @@ var Webigma = React.createClass({
             success: function(data) {
                 this.setState({state: 'recieve'});
                 this.refs.secret.getDOMNode().value = '';
-                this.setState({message: data.link, overlay: true});
+                this.setState({message: window.location.protocol + "//" + data.link, overlay: true});
                 //console.log('success', data);
             }.bind(this),
             error: function(xhr, status, err) {
